@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Project files
+/github_talent_search/github_talent_search/settings/config.json
+/github_talent_search/github_talent_search/service_credentials/*.json

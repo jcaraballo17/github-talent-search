@@ -3,6 +3,7 @@
   "debug_mode": "{boolean: flag to activate debug mode}",
   "hostnames": "{list: server domain names}",
   "github_oauth_token": "{string: the github OAuth token to be used by the scraping tool}",
+  "bigquery_credentials_filename":  "{string: service account credentials file}",
   "static": {
     "url": "{string: static files url}",
     "root": "{string: static files root path}"

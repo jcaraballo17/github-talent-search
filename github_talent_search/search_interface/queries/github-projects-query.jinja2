@@ -1,0 +1,24 @@
+SELECT users.login as username, projects.name as project_name, countries.country_name as country_name, projects.url as project_url, COUNT(*) as project_stars
+FROM `ghtorrentmysql1906.MySQL1906.watchers` watchers
+JOIN `ghtorrentmysql1906.MySQL1906.projects` projects ON projects.id = watchers.repo_id
+JOIN `ghtorrentmysql1906.MySQL1906.users` users ON users.id = projects.owner_id
+JOIN `bigquery-public-data.census_bureau_international.country_names_area` countries ON users.country_code = lower(countries.country_code)
+WHERE
+{% if language -%}
+projects.language = '{{ language }}' AND
+{%- endif %}
+{% if ignore_forks -%}
+projects.forked_from IS NULL AND
+{%- endif %}
+{% if last_update -%}
+projects.updated_at >= TIMESTAMP('{{ last_update }}') AND
+{%- endif %}
+{% if project_title -%}
+LOWER(projects.name) LIKE '%%{{ project_title }}%%' AND
+{%- endif %}
+{% if country_codes -%}
+users.country_code in ({% for code in country_codes %}'{{code}}'{% if not loop.last %}, {% endif %}{% endfor %}) AND
+{%- endif %}
+projects.owner_id NOT IN (SELECT org_id FROM `ghtorrentmysql1906.MySQL1906.organization_members`)
+GROUP BY project_name, project_url, username, country_name
+HAVING project_stars BETWEEN {{ stars_lower_bound }} AND {{ stars_upper_bound }}

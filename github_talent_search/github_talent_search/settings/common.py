@@ -20,7 +20,7 @@ from typing import Dict, Any, TextIO, List, Union
 Config = Dict[str, Any]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR: Path = Path(__file__).resolve().parent.parent
+BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
 
 # "Secret" configuration dictionary
 config: Config = {}
@@ -28,7 +28,7 @@ config: Config = {}
 # Load configuration file
 try:
     data_file: TextIO
-    with open(BASE_DIR / 'settings' / 'config.json') as data_file:
+    with open(BASE_DIR / 'github_talent_search' / 'settings' / 'config.json') as data_file:
         config = json.load(data_file)
 except IOError:
     if 'SKIP_CONFIG' not in os.environ:
@@ -163,5 +163,9 @@ STATIC_ROOT: str = static_config.get('root', '')
 STATIC_URL: str = static_config.get('url', '/static/')
 
 GITHUB_TOKEN: str = config.get('github_oauth_token')
+BIGQUERY_CREDENTIALS_FILENAME = config.get('bigquery_credentials_filename')
+
+USERS_QUERY_FILE_PATH: Path = BASE_DIR / 'search_interface' / 'queries' / 'github-projects-query.jinja2'
+CREDENTIALS_FILE_PATH: Path = BASE_DIR / 'github_talent_search' / 'service_credentials' / BIGQUERY_CREDENTIALS_FILENAME
 
 INTERNAL_IPS = ['127.0.0.1', ]
