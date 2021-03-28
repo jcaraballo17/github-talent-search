@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load list_tools %}
+
+{% block header %}
+    <h3>Github Search Results</h3>
+    <span>Here be them github projects meeting your search criteria</span>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+        <tr>
+            <th>Github Username</th>
+            <th>Emails</th>
+            <th>Country</th>
+            <th>Project of interest</th>
+            <th>Project stars</th>
+            <th>Project URL</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for result in search_results %}
+            <tr>
+                <td>{{ result.username }}</td>
+                <td>{{ result.emails|get_most_common_email }}</td>
+                <td>{{ result.country }}</td>
+                <td>{{ result.project_of_interest }}</td>
+                <td>{{ result.project_of_interest }}</td>
+                <td>{{ result.project_stars }}</td>
+                <td>{{ result.project_url }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

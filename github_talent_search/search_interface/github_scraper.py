@@ -75,5 +75,3 @@ class Scraper:
         ]
         logger.info(f'data found: {projects_data}')
         return projects_data
-
-
