@@ -21,5 +21,5 @@ users.country_code in ({% for code in country_codes %}'{{code}}'{% if not loop.l
 {%- endif %}
 projects.owner_id NOT IN (SELECT org_id FROM `ghtorrentmysql1906.MySQL1906.organization_members`)
 GROUP BY project_name, project_url, username, country_name
-HAVING project_stars BETWEEN {{ stars_lower_bound|default(0, true) }} AND {{ stars_upper_bound|default(200) }}
+HAVING project_stars BETWEEN {{ stars_lower_bound|default(0, true) }} AND {{ stars_upper_bound|default(200, true) }}
 LIMIT {{ limit }}

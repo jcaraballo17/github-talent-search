@@ -14,6 +14,9 @@ from search_interface.models import UserEmail
 
 logger: Logger = logging.getLogger(__name__)
 
+with settings.USERS_QUERY_FILE_PATH.open() as query_file:
+    query_template: str = query_file.read()
+
 
 class Scraper:
     github_events_url: str = 'https://api.github.com/users/{username}/events/public?per_page=100'
@@ -22,8 +25,7 @@ class Scraper:
     def __init__(self):
         self.github_token: str = settings.GITHUB_TOKEN
         credentials = service_account.Credentials.from_service_account_file(str(settings.CREDENTIALS_FILE_PATH))
-        with settings.USERS_QUERY_FILE_PATH.open() as query_file:
-            self.query_template: str = query_file.read()
+
         self.client = bigquery.Client(credentials=credentials)
 
     def find_emails(self, event_response: str):
@@ -57,7 +59,7 @@ class Scraper:
 
     def query_github_projects(self, query_data):
         parser = JinjaSql(param_style='pyformat')
-        query, bind_params = parser.prepare_query(self.query_template, query_data)
+        query, bind_params = parser.prepare_query(query_template, query_data)
         query_results = self.client.query(query % bind_params)
         return query_results
 
